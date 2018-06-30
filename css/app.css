@@ -121,7 +121,7 @@ h1 {
     left: 0;
     bottom: 0;
     width: 700px;
-    height: 200px;
+    height: 220px;
     padding: 20px;
     border-radius: 20px;
 }
@@ -132,4 +132,13 @@ h1 {
 
 .modal.hidden {
     display: none;
+}
+
+.modal .btn {
+    text-align: center;
+    padding: 10px;
+    background-color: aliceblue;
+    margin: 0 200px;
+    border-radius: 10px;
+    cursor: pointer;
 }
