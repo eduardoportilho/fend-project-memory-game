@@ -14,13 +14,17 @@ const cardsSymbols = [
 // Game state
 let blockCardFlip = false;
 let moveCount = 0;
+let startTime = Date.now();
+let rating = 0;
 
 function generateCardHtml(symbol) {
     return `<li class="card" data-card="${symbol}"><i class="fa ${symbol}"></i></li>`
 }
 
-function resetCards() {
+function resetGame() {
     setMoveCount(0);
+    rating = 0;
+    startTime = Date.now();
     const cards = cardsSymbols.concat(cardsSymbols);
     const shuffled = shuffle(cards);
     const deckHtml = shuffled.map(generateCardHtml).join('');
@@ -47,14 +51,24 @@ function checkForMatches() {
     }
     setMoveCount(moveCount + 1);
     const [card1, card2] = openCards;
+    // Match?
     if (card1.dataset.card === card2.dataset.card) {
         markMatchedCards([card1, card2]);
+        checkForGameCompletion();
     } else {
         blockCardFlip = true;
         setTimeout(() => {
             closeCards(openCards)
             blockCardFlip = false;
         }, 500);
+    }
+}
+
+function checkForGameCompletion() {
+    const notMatchedCards = document.querySelectorAll('.card:not(.match)');
+    if (notMatchedCards.length === 0) {
+        const time = Math.round((Date.now() - startTime) / 100, 2); 
+        showFinalDialog(time, moveCount, rating);
     }
 }
 
@@ -76,6 +90,15 @@ function closeCards(cards) {
     cards.forEach(card => {
         card.classList.remove('open', 'show');
     });
+}
+
+function showFinalDialog(time, moves, rating) {
+    document.querySelector('.modal .stats-time').innerHTML = time;
+    document.querySelector('.modal .stats-moves').innerHTML = moves;
+    document.querySelector('.modal .stats-rating').innerHTML = Array(rating)
+        .fill('<i class="fa fa-star"></i>')
+        .join('');
+    document.querySelector('.modal').classList.remove('hidden');
 }
 /*
  * Display the cards on the page
@@ -100,8 +123,8 @@ function shuffle(array) {
 }
 
 function init() {
-    document.querySelector('.restart').addEventListener('click', resetCards);
-    resetCards();
+    document.querySelector('.restart').addEventListener('click', resetGame);
+    resetGame();
 }
 
 init();

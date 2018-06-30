@@ -107,3 +107,29 @@ h1 {
     float: right;
     cursor: pointer;
 }
+
+/*
+ * Styles for the Modal Dialog
+ */
+ 
+.modal {
+    background: linear-gradient(160deg, #f7f4a3 0%, #f57ee1 100%);
+    position: absolute;
+    margin: auto;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 700px;
+    height: 200px;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.modal h2 {
+    text-align: center;
+}
+
+.modal.hidden {
+    display: none;
+}
