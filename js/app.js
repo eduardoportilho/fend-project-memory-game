@@ -1,3 +1,4 @@
+// Constants
 const deck = document.querySelector('.deck');
 const cardsSymbols = [
     'fa-diamond',
@@ -9,13 +10,17 @@ const cardsSymbols = [
     'fa-leaf',
     'fa-bicycle',
 ]
+
+// Game state
 let blockCardFlip = false;
+let moveCount = 0;
 
 function generateCardHtml(symbol) {
     return `<li class="card" data-card="${symbol}"><i class="fa ${symbol}"></i></li>`
 }
 
 function resetCards() {
+    setMoveCount(0);
     const cards = cardsSymbols.concat(cardsSymbols);
     const shuffled = shuffle(cards);
     const deckHtml = shuffled.map(generateCardHtml).join('');
@@ -40,6 +45,7 @@ function checkForMatches() {
     if (openCards.length < 2) {
         return;
     }
+    setMoveCount(moveCount + 1);
     const [card1, card2] = openCards;
     if (card1.dataset.card === card2.dataset.card) {
         markMatchedCards([card1, card2]);
@@ -50,6 +56,13 @@ function checkForMatches() {
             blockCardFlip = false;
         }, 500);
     }
+}
+
+function setMoveCount(moves) {
+    moveCount = moves;
+    document.querySelector('.moves').innerHTML = moves === 1 ? 
+        `1 Move` :
+        `${moves} Moves`;
 }
 
 function markMatchedCards(cards) {
