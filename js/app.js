@@ -38,7 +38,7 @@ function init() {
 function resetGame() {
     // Reset statistics.
     setMoveCount(0);
-    rating = 3;
+    updateRating();
     startTime = Date.now();
     // Start timer if not running
     if (!timerRunning) {
@@ -138,14 +138,16 @@ function checkForMatches() {
     if (openCards.length < 2) {
         return;
     }
+    setMoveCount(moveCount + 1);
     const [card1, card2] = openCards;
     // Match?
     if (card1.dataset.card === card2.dataset.card) {
         markMatchedCards([card1, card2]);
         checkForGameCompletion();
     } else {
-        setMoveCount(moveCount + 1);
+        // Block the cards to avoid opening a card while flipping 
         blockCardFlip = true;
+        // Close the cards after a while
         setTimeout(() => {
             closeCards(openCards)
             blockCardFlip = false;
@@ -200,9 +202,9 @@ function setMoveCount(moves) {
  * Update the ratings statistics based on the move count and update the display.
  */
 function updateRating() {
-    if (moveCount > 20) {
+    if (moveCount >= 20) {
         rating = 1;
-    } else if (moveCount > 10) {
+    } else if (moveCount >= 10) {
         rating = 2;
     } else {
         rating = 3;
